@@ -2,6 +2,8 @@
 
 A web application built with PHP (Laravel) and Livewire, using MySQL as the database, Nginx as the web server, and Node.js for frontend assets.
 
+![Screenshot](screenshot.png)
+
 ---
 
 ## 🚀 Requirements
