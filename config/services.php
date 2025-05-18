@@ -31,4 +31,6 @@ return [
         'region' => env('AWS_DEFAULT_REGION', 'us-east-1'),
     ],
 
+    'data_collection_mode' => env('DATA_COLLECTION_MODE_ENABLED', false),
+
 ];
