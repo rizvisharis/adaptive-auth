@@ -1,9 +1,9 @@
 <?php
 
+use App\Livewire\Register;
 use App\Livewire\AdaptiveLogin;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProfileController;
-use Illuminate\Support\Facades\Log;
 
 /*
 |--------------------------------------------------------------------------
@@ -16,7 +16,9 @@ use Illuminate\Support\Facades\Log;
 |
 */
 
-Route::get('/', AdaptiveLogin::class);
+Route::get('/', AdaptiveLogin::class)->name('home');
+
+Route::get('/registration', Register::class)->name('registration');
 
 Route::get('/dashboard', function () {
     return view('dashboard');

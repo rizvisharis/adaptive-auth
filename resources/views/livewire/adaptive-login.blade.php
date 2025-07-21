@@ -40,6 +40,13 @@
             </button>
         </form>
 
+        <div class="text-center text-sm text-gray-600">
+            Don't have an account?
+            <a href="{{ route('registration') }}" class="text-indigo-600 hover:underline font-medium">
+                Click here to register
+            </a>
+        </div>
+
         <p class="text-xs text-center text-gray-400">© {{ now()->year }} RS7 — Adaptive Security</p>
     </div>
 </div>
