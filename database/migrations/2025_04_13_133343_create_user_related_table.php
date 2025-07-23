@@ -29,7 +29,7 @@ return new class extends Migration
         Schema::create('keyboard_metrics', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained(table: 'users')->onDelete('cascade');
-            $table->string('username_typing_time');
+            $table->string('email_typing_time');
             $table->string('password_typing_time');
             $table->string('shift_count');
             $table->string('caps_lock_count');

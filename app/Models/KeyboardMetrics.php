@@ -11,7 +11,7 @@ class KeyboardMetrics extends Model
 
     protected $fillable = [
         'user_id',
-        'username_typing_time',
+        'email_typing_time',
         'password_typing_time',
         'shift_count',
         'caps_lock_count',

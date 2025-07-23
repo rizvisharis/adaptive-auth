@@ -22,7 +22,7 @@
         <form wire:submit.prevent="submit" class="space-y-5">
             <div>
                 <label for="email" class="block text-sm font-medium text-gray-700">Email</label>
-                <input id="email" type="email" wire:model.defer="email" @input="startUsernameTimer()" required
+                <input id="email" type="email" wire:model.defer="email" @input="startEmailTimer()" required
                     class="mt-1 w-full px-4 py-2 border border-gray-300 rounded-xl shadow-xs focus:ring-2 focus:ring-indigo-400"
                     placeholder="Enter your email" />
             </div>
@@ -58,19 +58,19 @@
         return {
             mouseData: [],
             prevSpeed: 0,
-            usernameStart: null,
+            emailStart: null,
             passwordStart: null,
             keyPresses: [],
             keyDownTime: null,
             prevKeyTime: null,
 
-            startUsernameTimer() {
-                if (!this.usernameStart) {
-                    this.usernameStart = Date.now();
+            startEmailTimer() {
+                if (!this.emailStart) {
+                    this.emailStart = Date.now();
                     fetch('/api/start-typing-session', {
                         method: 'POST',
                         headers: {'X-CSRF-TOKEN': '{{ csrf_token() }}'},
-                        body: JSON.stringify({ type: 'username', time: this.usernameStart })
+                        body: JSON.stringify({ type: 'email', time: this.emailStart })
                     });
                 }
             },

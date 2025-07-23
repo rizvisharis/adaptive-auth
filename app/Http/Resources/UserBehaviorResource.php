@@ -29,7 +29,7 @@ class UserBehaviorResource extends JsonResource
             'right_click_count' => $this->right_click_count,
 
             // Keyboard Metrics
-            'username_typing_time' => $this->username_typing_time,
+            'email_typing_time' => $this->email_typing_time,
             'password_typing_time' => $this->password_typing_time,
             'shift_count' => $this->shift_count,
             'caps_lock_count' => $this->caps_lock_count,

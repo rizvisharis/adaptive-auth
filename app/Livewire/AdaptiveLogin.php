@@ -37,7 +37,7 @@ class AdaptiveLogin extends Component
     public function submit()
     {
         $typingEndTime = now()->timestamp * 1000;
-        $usernameTypingTime = $typingEndTime - session('username_typing_start', $typingEndTime);
+        $emailTypingTime = $typingEndTime - session('email_typing_start', $typingEndTime);
         $passwordTypingTime = $typingEndTime - session('password_typing_start', $typingEndTime);
 
         if (!Auth::attempt(['email' => $this->email, 'password' => $this->password])) {
@@ -48,12 +48,12 @@ class AdaptiveLogin extends Component
         $user = Auth::user();
 
         if (config('services.data_collection_mode')) {
-            $this->storeUserMetrics($user, $usernameTypingTime, $passwordTypingTime);
+            $this->storeUserMetrics($user, $emailTypingTime, $passwordTypingTime);
             session()->flash('message', 'Login successful!');
             return redirect()->to('/dashboard');
         }
 
-        $result = $this->callAuthScoreAPI($usernameTypingTime, $passwordTypingTime);
+        $result = $this->callAuthScoreAPI($emailTypingTime, $passwordTypingTime);
 
         if (!$result) {
             session()->flash('error', 'Authentication service error.');
@@ -63,7 +63,7 @@ class AdaptiveLogin extends Component
         $this->handleNextStep($result['next_step'] ?? 'otp_verification');
     }
 
-    private function storeUserMetrics($user, $usernameTypingTime, $passwordTypingTime)
+    private function storeUserMetrics($user, $emailTypingTime, $passwordTypingTime)
     {
         $user->mouseMetrics()->create([
             'mouse_speed' => $this->mouseMetrics['speed'],
@@ -78,7 +78,7 @@ class AdaptiveLogin extends Component
         ]);
 
         $user->keyboardMetrics()->create([
-            'username_typing_time' => strlen($this->email) ? $usernameTypingTime / strlen($this->email) : 0,
+            'email_typing_time' => strlen($this->email) ? $emailTypingTime / strlen($this->email) : 0,
             'password_typing_time' => strlen($this->password) ? $passwordTypingTime / strlen($this->password) : 0,
             'shift_count' => $this->keyboardMetrics['shiftCount'],
             'caps_lock_count' => $this->keyboardMetrics['capsLockCount'],
@@ -107,7 +107,7 @@ class AdaptiveLogin extends Component
         ]);
     }
 
-    private function callAuthScoreAPI($usernameTypingTime, $passwordTypingTime)
+    private function callAuthScoreAPI($emailTypingTime, $passwordTypingTime)
     {
         $behaviorInput = [
             'mouse_speed' => $this->safeFloat($this->mouseMetrics['speed']),
@@ -119,7 +119,7 @@ class AdaptiveLogin extends Component
             'total_distance' => $this->safeFloat($this->mouseMetrics['totalDistance']),
             'left_click_count' => $this->safeInt($this->leftClickCount),
             'right_click_count' => $this->safeInt($this->rightClickCount),
-            'username_typing_time' => strlen($this->email) ? $usernameTypingTime / strlen($this->email) : 0,
+            'email_typing_time' => strlen($this->email) ? $emailTypingTime / strlen($this->email) : 0,
             'password_typing_time' => strlen($this->password) ? $passwordTypingTime / strlen($this->password) : 0,
             'shift_count' => $this->safeInt($this->keyboardMetrics['shiftCount']),
             'caps_lock_count' => $this->safeInt($this->keyboardMetrics['capsLockCount']),

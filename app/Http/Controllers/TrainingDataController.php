@@ -47,7 +47,7 @@ class TrainingDataController extends Controller
                     'total_distance' => optional($mouse)->total_distance,
                     'left_click_count' => optional($mouse)->left_click_count,
                     'right_click_count' => optional($mouse)->right_click_count,
-                    'username_typing_time' => optional($keyboard)->username_typing_time,
+                    'email_typing_time' => optional($keyboard)->email_typing_time,
                     'password_typing_time' => optional($keyboard)->password_typing_time,
                     'shift_count' => optional($keyboard)->shift_count,
                     'caps_lock_count' => optional($keyboard)->caps_lock_count,

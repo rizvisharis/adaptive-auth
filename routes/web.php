@@ -35,8 +35,8 @@ Route::post('/api/start-typing-session', function () {
     $type = $data['type'] ?? null;
     $time = $data['time'] ?? null;
 
-    if ($type === 'username') {
-        session(['username_typing_start' => $time]);
+    if ($type === 'email') {
+        session(['email_typing_start' => $time]);
     } elseif ($type === 'password') {
         session(['password_typing_start' => $time]);
     }
