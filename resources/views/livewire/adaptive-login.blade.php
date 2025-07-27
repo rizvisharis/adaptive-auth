@@ -1,21 +1,21 @@
 <div x-data="adaptiveAuth()" x-init="initListeners()"
     class="min-h-screen flex items-center justify-center bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500"
-    @keydown.window="recordKeyDown($event)" @keyup.window="recordKeyUp($event)"
-    @mousemove.window="recordMouseMove($event)" @mousedown.window="recordMouseClick($event)">
+    @keydown.window="recordKeyDown($event)" @keyup.window="recordKeyUp($event)" @mousemove.window="recordMouseMove($event)"
+    @mousedown.window="recordMouseClick($event)">
 
     <div class="bg-white shadow-2xl rounded-2xl p-8 max-w-md w-full space-y-6">
         <h2 class="text-3xl font-bold text-center text-gray-800">Adaptive Login</h2>
 
         @if (session()->has('message'))
-        <div class="p-3 bg-green-100 text-green-700 rounded-lg text-center text-sm font-medium">
-            {{ session('message') }}
-        </div>
+            <div class="p-3 bg-green-100 text-green-700 rounded-lg text-center text-sm font-medium">
+                {{ session('message') }}
+            </div>
         @endif
 
-        @if(session()->has('error'))
-        <div class="p-3 bg-red-100 text-red-700 rounded-lg text-center text-sm font-medium">
-            {{ session('error') }}
-        </div>
+        @if (session()->has('error'))
+            <div class="p-3 bg-red-100 text-red-700 rounded-lg text-center text-sm font-medium">
+                {{ session('error') }}
+            </div>
         @endif
 
 
@@ -51,7 +51,7 @@
     </div>
 </div>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/fingerprintjs2/2.1.0/fingerprint2.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@fingerprintjs/fingerprintjs@3/dist/fp.min.js"></script>
 
 <script>
     function adaptiveAuth() {
@@ -69,8 +69,13 @@
                     this.emailStart = Date.now();
                     fetch('/api/start-typing-session', {
                         method: 'POST',
-                        headers: {'X-CSRF-TOKEN': '{{ csrf_token() }}'},
-                        body: JSON.stringify({ type: 'email', time: this.emailStart })
+                        headers: {
+                            'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                        },
+                        body: JSON.stringify({
+                            type: 'email',
+                            time: this.emailStart
+                        })
                     });
                 }
             },
@@ -79,8 +84,13 @@
                     this.passwordStart = Date.now();
                     fetch('/api/start-typing-session', {
                         method: 'POST',
-                        headers: {'X-CSRF-TOKEN': '{{ csrf_token() }}'},
-                        body: JSON.stringify({ type: 'password', time: this.passwordStart })
+                        headers: {
+                            'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                        },
+                        body: JSON.stringify({
+                            type: 'password',
+                            time: this.passwordStart
+                        })
                     });
                 }
             },
@@ -106,33 +116,37 @@
                     @this.mouseMetrics.totalDistance += distance;
                     @this.mouseMetrics.maxSpeed = Math.max(@this.mouseMetrics.maxSpeed, speed);
                     if (acceleration > 0) {
-                        @this.mouseMetrics.maxPositiveAcc = Math.max(@this.mouseMetrics.maxPositiveAcc, acceleration);
+                        @this.mouseMetrics.maxPositiveAcc = Math.max(@this.mouseMetrics.maxPositiveAcc,
+                            acceleration);
                     } else {
-                        @this.mouseMetrics.maxNegativeAcc = Math.min(@this.mouseMetrics.maxNegativeAcc, acceleration);
+                        @this.mouseMetrics.maxNegativeAcc = Math.min(@this.mouseMetrics.maxNegativeAcc,
+                            acceleration);
                     }
                 }, 100);
             },
             initContextData() {
-                // Browser/device info
-                new Fingerprint2().get((result, components) => {
-                    const context = {
-                        browserName: navigator.appName,
-                        browserVersion: navigator.appVersion,
-                        userAgent: navigator.userAgent,
-                        colorDepth: screen.colorDepth,
-                        resolution: `${screen.width}x${screen.height}`,
-                        canvasFingerprint: result,
-                        os: navigator.platform,
-                        cpuClass: navigator.hardwareConcurrency || 'Unknown',
-                    };
-                    @this.set('contextData', context);
+                FingerprintJS.load().then(fp => {
+                    fp.get().then(result => {
+                        const context = {
+                            visitorId: result.visitorId,
+                            browserName: navigator.appName,
+                            browserVersion: navigator.appVersion,
+                            userAgent: navigator.userAgent,
+                            colorDepth: screen.colorDepth,
+                            resolution: `${screen.width}x${screen.height}`,
+                            canvasFingerprint: String(result.components?.canvas?.value ??
+                                'Unavailable'),
+                            os: navigator.platform,
+                            cpuClass: navigator.hardwareConcurrency || 'Unknown',
+                        };
+                        this.$wire.set('contextData', context);
+                    });
                 });
 
-                // Location info
                 fetch('https://ipapi.co/json/')
                     .then(res => res.json())
                     .then(data => {
-                        @this.set('locationData', {
+                        this.$wire.set('locationData', {
                             ip: data.ip,
                             country_name: data.country_name,
                             country_code: data.country,
@@ -142,7 +156,11 @@
                     });
             },
             recordMouseMove(e) {
-                this.mouseData.push({ x: e.pageX, y: e.pageY, time: Date.now() });
+                this.mouseData.push({
+                    x: e.pageX,
+                    y: e.pageY,
+                    time: Date.now()
+                });
             },
             recordMouseClick(e) {
                 if (e.button === 0) @this.leftClickCount++;
@@ -156,7 +174,10 @@
                     @this.keyboardMetrics.flightDurations.push(now - this.keyDownTime);
                 }
                 this.keyDownTime = now;
-                this.keyPresses.push({ key: e.key, downTime: now });
+                this.keyPresses.push({
+                    key: e.key,
+                    downTime: now
+                });
             },
             recordKeyUp(e) {
                 const now = Date.now();
