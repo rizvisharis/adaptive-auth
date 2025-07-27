@@ -2,13 +2,11 @@
     <div class="bg-white shadow-2xl rounded-2xl p-8 max-w-md w-full space-y-6">
         <h2 class="text-3xl font-bold text-center text-gray-800">Register</h2>
 
-        <form method="POST" action="{{ route('register') }}" class="space-y-5">
-            @csrf
-
+        <form wire:submit.prevent="register" class="space-y-5">
             <!-- Name -->
             <div>
                 <label for="name" class="block text-sm font-medium text-gray-700">Name</label>
-                <input id="name" type="text" name="name" :value="old('name')" required autofocus autocomplete="name"
+                <input id="name" type="text" wire:model.defer="name" required autofocus autocomplete="name"
                     class="mt-1 w-full px-4 py-2 border border-gray-300 rounded-xl shadow-xs focus:ring-2 focus:ring-indigo-400"
                     placeholder="Enter your full name" />
                 <x-input-error :messages="$errors->get('name')" class="mt-2" />
@@ -17,7 +15,7 @@
             <!-- Email -->
             <div>
                 <label for="email" class="block text-sm font-medium text-gray-700">Email</label>
-                <input id="email" type="email" name="email" :value="old('email')" required autocomplete="email"
+                <input id="email" type="email" wire:model.defer="email" required autocomplete="email"
                     class="mt-1 w-full px-4 py-2 border border-gray-300 rounded-xl shadow-xs focus:ring-2 focus:ring-indigo-400"
                     placeholder="Enter your email" />
                 <x-input-error :messages="$errors->get('email')" class="mt-2" />
@@ -26,7 +24,7 @@
             <!-- Password -->
             <div>
                 <label for="password" class="block text-sm font-medium text-gray-700">Password</label>
-                <input id="password" type="password" name="password" required autocomplete="new-password"
+                <input id="password" type="password" wire:model.defer="password" required autocomplete="new-password"
                     class="mt-1 w-full px-4 py-2 border border-gray-300 rounded-xl shadow-xs focus:ring-2 focus:ring-pink-400"
                     placeholder="••••••••" />
                 <x-input-error :messages="$errors->get('password')" class="mt-2" />
@@ -34,9 +32,8 @@
 
             <!-- Confirm Password -->
             <div>
-                <label for="password_confirmation" class="block text-sm font-medium text-gray-700">Confirm
-                    Password</label>
-                <input id="password_confirmation" type="password" name="password_confirmation" required
+                <label for="password_confirmation" class="block text-sm font-medium text-gray-700">Confirm Password</label>
+                <input id="password_confirmation" type="password" wire:model.defer="password_confirmation" required
                     autocomplete="new-password"
                     class="mt-1 w-full px-4 py-2 border border-gray-300 rounded-xl shadow-xs focus:ring-2 focus:ring-pink-400"
                     placeholder="••••••••" />
@@ -46,7 +43,7 @@
             <!-- Security Question -->
             <div>
                 <label for="security_question" class="block text-sm font-medium text-gray-700">Security Question</label>
-                <select id="security_question" name="security_question" required
+                <select id="security_question" wire:model.defer="security_question" required
                     class="mt-1 w-full px-4 py-2 border border-gray-300 rounded-xl shadow-xs focus:ring-2 focus:ring-indigo-400">
                     <option value="" disabled selected>Select a security question</option>
                     <option value="pet_name">What is your pet's name?</option>
@@ -61,7 +58,7 @@
             <!-- Security Answer -->
             <div>
                 <label for="security_answer" class="block text-sm font-medium text-gray-700">Your Answer</label>
-                <input id="security_answer" type="text" name="security_answer" required
+                <input id="security_answer" type="text" wire:model.defer="security_answer" required
                     class="mt-1 w-full px-4 py-2 border border-gray-300 rounded-xl shadow-xs focus:ring-2 focus:ring-indigo-400"
                     placeholder="Enter your answer" />
                 <x-input-error :messages="$errors->get('security_answer')" class="mt-2" />
