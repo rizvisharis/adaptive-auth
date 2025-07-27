@@ -2,8 +2,10 @@
 
 use App\Livewire\Register;
 use App\Livewire\AdaptiveLogin;
+use App\Livewire\OtpVerification;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProfileController;
+use App\Livewire\SecurityQuestionVerification;
 
 /*
 |--------------------------------------------------------------------------
@@ -43,6 +45,9 @@ Route::post('/api/start-typing-session', function () {
 
     return response()->json(['status' => 'ok']);
 });
+
+Route::get('/security-question', SecurityQuestionVerification::class)->name('security.question');
+Route::get('/otp-verification', OtpVerification::class)->name('otp.verification');
 
 
 
