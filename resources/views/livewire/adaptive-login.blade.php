@@ -134,8 +134,7 @@
                             userAgent: navigator.userAgent,
                             colorDepth: screen.colorDepth,
                             resolution: `${screen.width}x${screen.height}`,
-                            canvasFingerprint: String(result.components?.canvas?.value ??
-                                'Unavailable'),
+                            canvasFingerprint: result.visitorId,
                             os: navigator.platform,
                             cpuClass: navigator.hardwareConcurrency || 'Unknown',
                         };
