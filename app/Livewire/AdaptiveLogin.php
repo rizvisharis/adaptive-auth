@@ -5,6 +5,7 @@ namespace App\Livewire;
 use Livewire\Component;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Log;
 
 class AdaptiveLogin extends Component
 {
@@ -137,7 +138,18 @@ class AdaptiveLogin extends Component
             'os' => $this->contextData['os'] ?? '',
             'cpu_class' => $this->contextData['cpuClass'] ?? '',
             'resolution' => $this->contextData['resolution'] ?? '',
+            'ip' => $this->locationData['ip'] ?? '',
+            'country_name' => $this->locationData['country_name'] ?? '',
+            'country_code' => $this->locationData['country_code'] ?? '',
+            'region' => $this->locationData['region'] ?? '',
+            'city' => $this->locationData['city'] ?? '',
         ];
+
+        Log::debug('Calling Flask model with inputs', [
+            'behavior_input' => $behaviorInput,
+            'context_input' => $contextInput,
+            'expected_user' => $this->email,
+        ]);
 
         $response = Http::withHeaders(['Content-Type' => 'application/json'])
             ->post('http://127.0.0.1:5000/api/auth-score', [

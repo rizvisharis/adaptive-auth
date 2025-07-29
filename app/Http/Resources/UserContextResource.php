@@ -15,7 +15,7 @@ class UserContextResource extends JsonResource
     public function toArray(Request $request): array
     {
         return [
-            'email' => $this->user->email,
+            'email' => $this->email,
             'browser_name' => $this->browser_name,
             'browser_version' => $this->browser_version,
             'user_agent' => $this->user_agent,
@@ -24,6 +24,11 @@ class UserContextResource extends JsonResource
             'os' => $this->os,
             'cpu_class' => $this->cpu_class,
             'resolution' => $this->resolution,
+            'ip' => $this->ip,
+            'country_name' => $this->country_name,
+            'country_code' => $this->country_code,
+            'region' => $this->region,
+            'city' => $this->city,
         ];
     }
 }

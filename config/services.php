@@ -33,4 +33,9 @@ return [
 
     'data_collection_mode' => env('DATA_COLLECTION_MODE_ENABLED', false),
 
+    'ip_info' => [
+        'api_key' => env('IP_INFO_API_KEY'),
+        'base_url' => env('IP_INFO_BASE_URL', 'https://api.ipgeolocation.io/v2/ipgeo'),
+    ],
+
 ];

@@ -5,17 +5,40 @@ namespace App\Http\Controllers;
 use App\Http\Resources\UserBehaviorResource;
 use App\Models\User;
 use App\Models\ContextData;
-use Illuminate\Http\Request;
 use App\Http\Resources\UserContextResource;
-use Illuminate\Support\Facades\Log;
 
 class TrainingDataController extends Controller
 {
     public function getContextData()
     {
-        $data = ContextData::with(['user'])->get();
+        $users = User::with(['contextData', 'locationData'])->get();
 
-        $resource = UserContextResource::collection($data);
+        $rows = collect();
+
+        foreach ($users as $user) {
+            foreach ($user->contextData as $context) {
+                $location = $user->locationData->first();
+
+                $rows->push((object)[
+                    'email' => $user->email,
+                    'browser_name' => $context->browser_name,
+                    'browser_version' => $context->browser_version,
+                    'user_agent' => $context->user_agent,
+                    'color_depth' => $context->color_depth,
+                    'canvas_fingerprint' => $context->canvas_fingerprint,
+                    'os' => $context->os,
+                    'cpu_class' => $context->cpu_class,
+                    'resolution' => $context->resolution,
+                    'ip' => optional($location)->ip,
+                    'country_name' => optional($location)->country_name,
+                    'country_code' => optional($location)->country_code,
+                    'region' => optional($location)->region,
+                    'city' => optional($location)->city,
+                ]);
+            }
+        }
+
+        $resource = UserContextResource::collection($rows);
 
         return response()->json($resource);
     }

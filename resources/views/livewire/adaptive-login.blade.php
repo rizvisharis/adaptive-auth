@@ -142,15 +142,15 @@
                     });
                 });
 
-                fetch('https://ipapi.co/json/')
+                fetch('/api/ip-info')
                     .then(res => res.json())
                     .then(data => {
                         this.$wire.set('locationData', {
                             ip: data.ip,
-                            country_name: data.country_name,
-                            country_code: data.country,
-                            region: data.region,
-                            city: data.city
+                            country_name: data.location.country_name,
+                            country_code: data.location.country_code2,
+                            region: data.location.state_prov,
+                            city: data.location.city
                         });
                     });
             },
